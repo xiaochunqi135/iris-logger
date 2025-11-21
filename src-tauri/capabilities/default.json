@@ -1,0 +1,35 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "enables the default permissions",
+  "windows": [
+    "main"
+  ],
+  "permissions": [
+    "core:default",
+    "opener:default",
+    "sql:default",
+    "sql:allow-execute",
+    {
+      "identifier": "http:default",
+      "allow": [
+        { "url": "https://restapi.amap.com/v3/assistant/coordinate/convert" },
+        { "url": "https://restapi.amap.com/v3/geocode/regeo" },
+        { "url": "https://restapi.amap.com/v3/weather/weatherInfo" }
+      ]
+    },
+    "dialog:default",
+    "store:default",
+    "store:allow-get",
+    "store:allow-set",
+    "store:allow-save",
+    "store:allow-load",
+    "fs:default",
+    "fs:write-all",
+    "fs:allow-create",
+    "fs:read-all",
+    "geolocation:allow-check-permissions",
+    "geolocation:allow-request-permissions",
+    "geolocation:allow-get-current-position"
+  ]
+}
