@@ -145,7 +145,7 @@ pub fn run() {
     let migrations = vec![ Migration {
         version: 1,
         description: "create_initial_tables",
-        sql: "CREATE TABLE IF NOT EXISTS logins (login_id TEXT PRIMARY KEY, login_time INTEGER, login_time_str TEXT, login_info TEXT);",
+        sql: "CREATE TABLE IF NOT EXISTS logins (login_id INTEGER PRIMARY KEY AUTOINCREMENT, login_time INTEGER, login_time_str TEXT, login_info TEXT);",
         kind: MigrationKind::Up,
     }];
 

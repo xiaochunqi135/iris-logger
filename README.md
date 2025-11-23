@@ -8,7 +8,10 @@
 
 ### TODO
 
+- ~~amap的api通过dotenv导入~~
+- ~~数据库id自增~~
 - 前端添加防抖
+- 前端分割代码
 
 ### GPS
 
@@ -39,3 +42,7 @@ fun sendLocation(enableHighAccuracy: Boolean, successCallback: (location: Locati
 see [Android Code Signing](https://v2.tauri.app/distribute/sign/android/)
 
 the jks's password check dotenv
+
+### sqlite db
+
+位置在`/home/arco/.config/com.arco.iris-logger/data.db`

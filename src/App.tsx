@@ -75,8 +75,6 @@ function App() {
 
   const insertData = useCallback(async (infoText: string) => {
     if (!db) return;
-    // generate random login_id
-    const login_id = crypto.randomUUID().replaceAll("-", "");
     // get login_time as unix timestamp
     const login_now = new Date();
     const login_time = login_now.getTime();
@@ -84,8 +82,8 @@ function App() {
 
     try {
       const result = await db.execute(
-        "INSERT INTO logins (login_id, login_time, login_time_str, login_info) VALUES ($1, $2, $3, $4);",
-        [login_id, login_time, login_time_str, infoText],
+        "INSERT INTO logins (login_time, login_time_str, login_info) VALUES ($1, $2, $3);",
+        [login_time, login_time_str, infoText],
       );
       await message(JSON.stringify(result), {
         title: "vite-project",
