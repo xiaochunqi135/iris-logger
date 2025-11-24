@@ -110,6 +110,11 @@ function App() {
     // clear textInfo
     await updateStore("txt", "");
     setTextInfo("");
+
+    await message("记录已提交", {
+      title: "提示",
+      kind: "info",
+    });
   }, [textInfo, insertData, updateStore]);
 
   const debouncedSubmit = useDebouncedCallback(submitInfo, 2000);
