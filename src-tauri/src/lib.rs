@@ -29,11 +29,6 @@ async fn update_weather(app: AppHandle, gps_location: &str) -> Result<Weather, (
     let gps: serde_json::Value = serde_json::from_str(&gps_location).unwrap();
     let latitude = gps["latitude"].as_f64().unwrap();
     let longitude = gps["longitude"].as_f64().unwrap();
-    app.dialog()
-        .message(gps_location)
-        .kind(MessageDialogKind::Info)
-        .title("Info")
-        .blocking_show();
 
     // 验证缓存没有过期直接使用缓存
     let store = app.store("store.json").unwrap();
@@ -58,11 +53,6 @@ async fn update_weather(app: AppHandle, gps_location: &str) -> Result<Weather, (
         ) < 0.45
         {
             if now - weather_timestamp < 60000 {
-                app.dialog()
-                    .message("使用缓存的天气")
-                    .kind(MessageDialogKind::Info)
-                    .title("Info")
-                    .blocking_show();
                 return Ok(Weather {
                     weather: weather_value.to_string(),
                 });
@@ -80,7 +70,7 @@ async fn update_weather(app: AppHandle, gps_location: &str) -> Result<Weather, (
     if let Err(e) = response {
         app.dialog()
             .message(e.to_string())
-            .kind(MessageDialogKind::Error)
+            .kind(MessageDialogKind::Info)
             .title("Error")
             .blocking_show();
         return Err(());
@@ -108,7 +98,7 @@ async fn update_weather(app: AppHandle, gps_location: &str) -> Result<Weather, (
     if let Err(e) = regeo_response {
         app.dialog()
             .message(e.to_string())
-            .kind(MessageDialogKind::Error)
+            .kind(MessageDialogKind::Info)
             .title("Error")
             .blocking_show();
         return Err(());
@@ -133,7 +123,7 @@ async fn update_weather(app: AppHandle, gps_location: &str) -> Result<Weather, (
     if let Err(e) = weather_response {
         app.dialog()
             .message(e.to_string())
-            .kind(MessageDialogKind::Error)
+            .kind(MessageDialogKind::Info)
             .title("Error")
             .blocking_show();
         return Err(());
