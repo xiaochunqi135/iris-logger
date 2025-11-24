@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import { Link } from "wouter";
 import { ask, message, save } from "@tauri-apps/plugin-dialog";
 import type { Store } from "@tauri-apps/plugin-store";
 import type Database from "@tauri-apps/plugin-sql";
 import { exportSheet, ExportTypes } from "@jsr/psych__sheet";
 import { open } from "@tauri-apps/plugin-fs";
+import { platform } from "@tauri-apps/plugin-os";
 
 type Logins = {
   login_id: number;
@@ -96,13 +96,30 @@ function Viewer({ db, store }: { db: Database | null; store: Store | null }) {
       });
 
       if (documentDir) {
-        const file = await open(documentDir, {
-          read: true,
-          write: true,
-          create: true,
-        });
-        await file.write(excel_raw);
-        await file.close();
+        // android和win不一样，android系统会创建文件，给的文件连接直接写入，win需要创建文件
+        const currentPlatform = platform();
+        switch (currentPlatform) {
+          case "android":
+            const afile = await open(documentDir);
+            await afile.write(excel_raw);
+            await afile.close();
+            break;
+          case "windows":
+            const file = await open(documentDir, {
+              read: true,
+              write: true,
+              create: true,
+            });
+            await file.write(excel_raw);
+            await file.close();
+            break;
+          default:
+            await message("未知平台不支持文件写入", {
+              title: "警告",
+              kind: "error",
+            });
+            break;
+        }
       }
     } catch (e) {
       await message("文件写入失败", {
@@ -113,22 +130,13 @@ function Viewer({ db, store }: { db: Database | null; store: Store | null }) {
   }, [db]);
 
   return (
-    <div className="w-auto min-w-sm max-w-screen-sm text-sm text-center text-wrap p-6">
+    <div className="absolute top-28 w-full min-w-sm max-w-screen-sm text-sm text-center text-wrap p-6">
       <div className="grid grid-cols-2 gap-4">
-        <div></div>
-        <div>
-          <Link to="/">
-            <button className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
-              返回主页
-            </button>
-          </Link>
-        </div>
-
         <div className="col-span-2">
           {isLoading
             ? <div>数据加载中...</div>
             : (
-              <table className="border-collapse border border-gray-400">
+              <table className="border-collapse border border-gray-400 table-fixed">
                 <caption className="caption-bottom">
                   仅显示最近10条数据
                 </caption>

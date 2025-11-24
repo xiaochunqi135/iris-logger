@@ -1,6 +1,6 @@
 [package]
 name = "iris-logger"
-version = "0.1.0"
+version = "0.1.1"
 description = "记录一些什么"
 authors = ["arco@aoi.sh"]
 license = "MIT"
@@ -29,6 +29,7 @@ tauri-plugin-dialog = "2"
 tauri-plugin-store = "2"
 tauri-plugin-fs = "2"
 tauri-plugin-geolocation = { path = "/home/arco/Downloads/plugins-workspace/plugins/geolocation" }
+tauri-plugin-os = "2"
 
 [profile.dev]
 incremental = true # 以较小的步骤编译您的二进制文件。

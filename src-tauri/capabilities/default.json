@@ -13,9 +13,15 @@
     {
       "identifier": "http:default",
       "allow": [
-        { "url": "https://restapi.amap.com/v3/assistant/coordinate/convert" },
-        { "url": "https://restapi.amap.com/v3/geocode/regeo" },
-        { "url": "https://restapi.amap.com/v3/weather/weatherInfo" }
+        {
+          "url": "https://restapi.amap.com/v3/assistant/coordinate/convert"
+        },
+        {
+          "url": "https://restapi.amap.com/v3/geocode/regeo"
+        },
+        {
+          "url": "https://restapi.amap.com/v3/weather/weatherInfo"
+        }
       ]
     },
     "dialog:default",
@@ -30,6 +36,7 @@
     "fs:read-all",
     "geolocation:allow-check-permissions",
     "geolocation:allow-request-permissions",
-    "geolocation:allow-get-current-position"
+    "geolocation:allow-get-current-position",
+    "os:default"
   ]
 }

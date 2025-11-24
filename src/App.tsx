@@ -1,5 +1,5 @@
 import React, { Suspense, useCallback, useEffect, useState } from "react";
-import { Link, Route, Switch } from "wouter";
+import { Link, Route, Switch, useRoute } from "wouter";
 import { useDebouncedCallback } from "use-debounce";
 // import reactLogo from "./assets/react.svg";
 // import viteLogo from "/vite.svg"; //public文件夹下的
@@ -20,9 +20,11 @@ function App() {
     false,
   );
   const [db, setDb] = useState<Database | null>(null);
+  const [isViewer] = useRoute("/");
 
   useEffect(() => {
     let mounted = true;
+    let abortController = new AbortController();
 
     async function init() {
       try {
@@ -60,6 +62,7 @@ function App() {
     init();
     return () => {
       mounted = false;
+      abortController.abort();
     };
   }, []);
 
@@ -112,63 +115,76 @@ function App() {
   const debouncedSubmit = useDebouncedCallback(submitInfo, 2000);
 
   return (
-    <Switch>
-      <Route path="/viewer">
-        <Suspense
-          fallback={
-            <div className="w-auto min-w-full max-w-md text-3xl text-center">
-              页面加载中...
-            </div>
-          }
-        >
-          <Viewer db={db} store={store} />
-        </Suspense>
-      </Route>
-      <Route>
-        <div className="w-auto min-w-sm max-w-screen-sm text-2xl text-center p-6">
-          <div className="grid grid-cols-3 gap-4">
-            <div className="place-content-center text-left">
-              <Weather hasLocationPermission={hasLocationPermission} />
-            </div>
-            <div></div>
-            <div>
-              <Link to="/viewer">
-                <button className="bg-gray-500 hover:bg-gray-700 text-white py-2 px-4 h-8 w-24 text-sm rounded">
-                  查看记录
-                </button>
-              </Link>
-            </div>
-
-            <div className="col-span-3"></div>
-
-            <div className="col-span-3">
-              <div
-                onBlurCapture={handleBlurCapture}
-                className="w-full h-60 p-2"
-              >
-                <textarea
-                  id="info"
-                  value={textInfo}
-                  placeholder="可以写一下此刻的想法..."
-                  onChange={(e) => {
-                    setTextInfo(e.target.value);
-                  }}
-                  className="w-full h-full resize-none border border-gray-400"
-                />
+    <div>
+      <div className="absolute top-0 w-full text-2xl text-center pt-16 bg-blue-400">
+        <div className="grid grid-cols-3 gap-4">
+          <div className="place-content-center text-left">
+            <Weather hasLocationPermission={hasLocationPermission} />
+          </div>
+          <div></div>
+          <div>
+            {isViewer
+              ? (
+                <Link to="/viewer">
+                  <button className="bg-gray-500 hover:bg-gray-700 text-white py-2 px-4 text-sm rounded">
+                    查看记录
+                  </button>
+                </Link>
+              )
+              : (
+                <Link to="/">
+                  <button className="bg-gray-500 hover:bg-gray-700 text-white py-2 px-4 text-sm rounded">
+                    返回主页
+                  </button>
+                </Link>
+              )}
+          </div>
+        </div>
+      </div>
+      <Switch>
+        <Route path="/viewer">
+          <Suspense
+            fallback={
+              <div className="absolute top-28 w-full min-w-sm max-w-screen-sm text-2xl text-center p-6 pt-12">
+                页面加载中...
               </div>
-              <div>
-                <button
-                  onClick={() => debouncedSubmit()}
-                  className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 h-24 w-48 rounded"
+            }
+          >
+            <Viewer db={db} store={store} />
+          </Suspense>
+        </Route>
+        <Route>
+          <div className="absolute top-28 w-full min-w-sm max-w-screen-sm text-2xl text-center p-6">
+            <div className="grid grid-cols-3 gap-4">
+              <div className="col-span-3">
+                <div
+                  onBlurCapture={handleBlurCapture}
+                  className="w-full h-60 p-2"
                 >
-                  提交记录
-                </button>
+                  <textarea
+                    id="info"
+                    value={textInfo}
+                    placeholder="可以写一下此刻的想法..."
+                    onChange={(e) => {
+                      setTextInfo(e.target.value);
+                    }}
+                    className="w-full h-full resize-none border border-gray-400"
+                  />
+                </div>
+                <div>
+                  <button
+                    onClick={() => debouncedSubmit()}
+                    className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 h-24 w-48 rounded"
+                  >
+                    提交记录
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </Route>
-    </Switch>
+        </Route>
+      </Switch>
+    </div>
   );
 }
 
