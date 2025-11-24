@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "wouter";
-import { message, save } from "@tauri-apps/plugin-dialog";
+import { ask, message, save } from "@tauri-apps/plugin-dialog";
 import type { Store } from "@tauri-apps/plugin-store";
 import type Database from "@tauri-apps/plugin-sql";
 import { exportSheet, ExportTypes } from "@jsr/psych__sheet";
@@ -27,8 +27,8 @@ function Viewer({ db, store }: { db: Database | null; store: Store | null }) {
 
         setLogins(result);
       } catch (e) {
-        await message(String(e), {
-          title: "vite-project",
+        await message("数据库查询失败", {
+          title: "警告",
           kind: "error",
         });
       }
@@ -39,39 +39,52 @@ function Viewer({ db, store }: { db: Database | null; store: Store | null }) {
   }, [db]);
 
   const resetDB = useCallback(async () => {
+    const continue_reset = await ask("确定要重置数据库和缓存吗？", {
+      title: "注意",
+      kind: "warning",
+    });
+    if (!continue_reset) return;
+
     if (!db) return;
     if (!store) return;
     try {
-      const result = await db.execute(
+      await db.execute(
         "DROP TABLE IF EXISTS logins; DROP TABLE IF EXISTS _sqlx_migrations;",
       );
-      await message(JSON.stringify(result), {
-        title: "vite-project",
-        kind: "info",
-      });
     } catch (e) {
-      await message(String(e), {
-        title: "vite-project",
+      await message("数据库删除失败", {
+        title: "警告",
         kind: "error",
       });
     }
     try {
       await store.clear();
     } catch (e) {
-      await message(String(e), {
-        title: "vite-project",
+      await message("缓存清空失败", {
+        title: "警告",
         kind: "error",
       });
     }
+
+    await message(
+      "【重置成功】请立即完全退出APP，再打开使用。不重启使用会出错。",
+      {
+        title: "注意",
+        kind: "warning",
+      },
+    );
   }, [db, store]);
 
   const saveExcel = useCallback(async () => {
+    await message("请选择表格存在哪，并且给表格取名，例如“abc.xlsx”。", {
+      title: "注意",
+      kind: "info",
+    });
+
     if (!db) return;
     try {
       const result = await db.select("SELECT * FROM logins;") as Logins[];
       const excel_raw = exportSheet(result, ExportTypes.XLSX);
-
-      // const file_name = `logs-${new Date().getTime()}.xlsx`;
 
       const documentDir = await save({
         filters: [
@@ -83,10 +96,6 @@ function Viewer({ db, store }: { db: Database | null; store: Store | null }) {
       });
 
       if (documentDir) {
-        await message(JSON.stringify(documentDir), {
-          title: "vite-project",
-          kind: "info",
-        });
         const file = await open(documentDir, {
           read: true,
           write: true,
@@ -96,8 +105,8 @@ function Viewer({ db, store }: { db: Database | null; store: Store | null }) {
         await file.close();
       }
     } catch (e) {
-      await message(String(e), {
-        title: "vite-project",
+      await message("文件写入失败", {
+        title: "警告",
         kind: "error",
       });
     }

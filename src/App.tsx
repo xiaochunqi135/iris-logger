@@ -3,7 +3,6 @@ import { Link, Route, Switch } from "wouter";
 import { useDebouncedCallback } from "use-debounce";
 // import reactLogo from "./assets/react.svg";
 // import viteLogo from "/vite.svg"; //public文件夹下的
-import "./App.css";
 import { message } from "@tauri-apps/plugin-dialog";
 import { Store } from "@tauri-apps/plugin-store";
 import {
@@ -72,17 +71,13 @@ function App() {
     const login_time_str = login_now.toLocaleString("zh-CN");
 
     try {
-      const result = await db.execute(
+      await db.execute(
         "INSERT INTO logins (login_time, login_time_str, login_info) VALUES ($1, $2, $3);",
         [login_time, login_time_str, infoText],
       );
-      await message(JSON.stringify(result), {
-        title: "vite-project",
-        kind: "info",
-      });
     } catch (e) {
-      await message(String(e), {
-        title: "vite-project",
+      await message("数据库写入错误", {
+        title: "警告",
         kind: "error",
       });
     }

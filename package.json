@@ -8,6 +8,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.1.17",
     "@tauri-apps/api": "^2.9.0",
     "@tauri-apps/plugin-dialog": "~2.4.2",
     "@tauri-apps/plugin-fs": "~2.4.4",
@@ -19,6 +20,7 @@
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "@jsr/psych__sheet": "^1.0.8",
+    "tailwindcss": "^4.1.17",
     "use-debounce": "^10.0.6",
     "wouter": "^3.7.1"
   },
