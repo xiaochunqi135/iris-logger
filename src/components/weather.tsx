@@ -48,7 +48,8 @@ function Weather({ hasLocationPermission = false }) {
 
   return (
     <div>
-      天气： {isLoading ? "加载中..." : weather}
+      <span className="font-bold">天气：</span>
+      <span>{isLoading ? "加载中..." : weather}</span>
     </div>
   );
 }

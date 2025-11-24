@@ -113,46 +113,69 @@ function Viewer({ db, store }: { db: Database | null; store: Store | null }) {
   }, [db]);
 
   return (
-    <div>
-      <p>
-        <Link to="/">返回</Link>
-      </p>
+    <div className="w-auto min-w-sm max-w-screen-sm text-sm text-center text-wrap p-6">
+      <div className="grid grid-cols-2 gap-4">
+        <div></div>
+        <div>
+          <Link to="/">
+            <button className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
+              返回主页
+            </button>
+          </Link>
+        </div>
 
-      <div>
-        {isLoading ? "Loading..." : (
-          <table>
-            <tr>
-              <th>序号</th>
-              <th>时间</th>
-              <th>信息</th>
-            </tr>
+        <div className="col-span-2">
+          {isLoading
+            ? <div>数据加载中...</div>
+            : (
+              <table className="border-collapse border border-gray-400">
+                <caption className="caption-bottom">
+                  仅显示最近10条数据
+                </caption>
+                <thead>
+                  <tr>
+                    <th className="border border-gray-300 p-2">序号</th>
+                    <th className="border border-gray-300 p-2">时间</th>
+                    <th className="border border-gray-300 w-full p-2">信息</th>
+                  </tr>
+                </thead>
 
-            {logins.map((login, index) => (
-              <tr key={login.login_id}>
-                <td>{index + 1}</td>
-                <td>{login.login_time_str}</td>
-                <td>{login.login_info}</td>
-              </tr>
-            ))}
-          </table>
-        )}
-      </div>
+                <tbody>
+                  {logins.map((login, index) => (
+                    <tr key={login.login_id} className="h-20">
+                      <td className="border border-gray-300 p-2">
+                        {index + 1}
+                      </td>
+                      <td className="border border-gray-300 p-2">
+                        {login.login_time_str}
+                      </td>
+                      <td className="border border-gray-300 w-full text-left p-2">
+                        {login.login_info}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+        </div>
 
-      <p>
         <div>
           <button
             onClick={() => saveExcel()}
+            className="bg-green-700 hover:bg-green-500 text-white py-2 px-4 rounded"
           >
             导出全部数据
           </button>
-
+        </div>
+        <div>
           <button
             onClick={() => resetDB()}
+            className="bg-red-500 hover:bg-red-800 text-white py-2 px-4 rounded"
           >
-            完全初始化数据库（需要立即重启）
+            <p>初始化数据库</p>
           </button>
         </div>
-      </p>
+      </div>
     </div>
   );
 }
