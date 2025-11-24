@@ -1,3 +1,4 @@
+use serde::Serialize;
 use serde_json::json;
 use std::{env, time};
 use tauri::AppHandle;
@@ -7,6 +8,11 @@ use tauri_plugin_sql::{Migration, MigrationKind};
 use tauri_plugin_store::StoreExt;
 
 const API_KEY: &str = env!("API_KEY");
+
+#[derive(Serialize)]
+struct Weather {
+    weather: String,
+}
 
 fn calculate_hypotenuse(a: f64, b: f64) -> f64 {
     // 根据勾股定理 c^2 = a^2 + b^2
@@ -19,7 +25,7 @@ fn calculate_hypotenuse(a: f64, b: f64) -> f64 {
 }
 
 #[tauri::command(rename_all = "snake_case")]
-async fn update_weather(app: AppHandle, gps_location: &str) -> Result<String, ()> {
+async fn update_weather(app: AppHandle, gps_location: &str) -> Result<Weather, ()> {
     let gps: serde_json::Value = serde_json::from_str(&gps_location).unwrap();
     let latitude = gps["latitude"].as_f64().unwrap();
     let longitude = gps["longitude"].as_f64().unwrap();
@@ -57,7 +63,9 @@ async fn update_weather(app: AppHandle, gps_location: &str) -> Result<String, ()
                     .kind(MessageDialogKind::Info)
                     .title("Info")
                     .blocking_show();
-                return Ok(format!("{{\"weather\":\"{}\"}}", weather_value));
+                return Ok(Weather {
+                    weather: weather_value.to_string(),
+                });
             }
         }
     }
@@ -83,7 +91,9 @@ async fn update_weather(app: AppHandle, gps_location: &str) -> Result<String, ()
 
     // 可能没有locations
     if locations.is_none() {
-        return Ok(format!("{{\"weather\":\"\"}}"));
+        return Ok(Weather {
+            weather: "".to_string(),
+        });
     }
 
     // println!("Converted locations: {}", locations);
@@ -111,7 +121,9 @@ async fn update_weather(app: AppHandle, gps_location: &str) -> Result<String, ()
 
     // 可能没有adcode
     if adcode.is_none() {
-        return Ok(format!("{{\"weather\":\"\"}}"));
+        return Ok(Weather {
+            weather: "".to_string(),
+        });
     }
 
     // curl --location --request GET 'https://restapi.amap.com/v3/weather/weatherInfo?city=110101&extensions=base'
@@ -131,13 +143,18 @@ async fn update_weather(app: AppHandle, gps_location: &str) -> Result<String, ()
     let weather_str = weather_json["lives"][0]["weather"].as_str();
 
     if weather_str.is_none() {
-        return Ok(format!("{{\"weather\":\"\"}}"));
+        return Ok(Weather {
+            weather: "".to_string(),
+        });
     }
 
     // 将结果缓存起来
     store.set("weather", json!({ "value": weather_str.unwrap(), "timestamp": time::SystemTime::now().duration_since(time::UNIX_EPOCH).unwrap().as_secs(), "latitude": latitude, "longitude": longitude }));
 
-    Ok(format!("{{\"weather\":\"{}\"}}", weather_str.unwrap()))
+    // Ok(format!("{{\"weather\":\"{}\"}}", weather_str.unwrap()))
+    Ok(Weather {
+        weather: weather_str.unwrap().to_string(),
+    })
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
