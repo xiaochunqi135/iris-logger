@@ -136,13 +136,13 @@ function Viewer({ db, store }: { db: Database | null; store: Store | null }) {
   }, [db]);
 
   return (
-    <div className="absolute top-28 w-full min-w-sm max-w-screen-sm text-sm text-center text-wrap p-6">
-      <div className="grid grid-cols-2 gap-4">
-        <div className="col-span-2">
-          {isLoading
-            ? <div>数据加载中...</div>
-            : (
-              <table className="border-collapse border border-gray-400 table-fixed">
+    <div className="w-full grid grid-cols-2 gap-4 justify-center items-center text-center">
+      <div className="w-full col-span-2">
+        {isLoading
+          ? <div>数据加载中...</div>
+          : (
+            <div id="table-div" className="w-full p-6">
+              <table className="w-full border-collapse border border-gray-400 table-auto">
                 <caption className="caption-bottom">
                   仅显示最近10条数据
                 </caption>
@@ -170,25 +170,25 @@ function Viewer({ db, store }: { db: Database | null; store: Store | null }) {
                   ))}
                 </tbody>
               </table>
-            )}
-        </div>
+            </div>
+          )}
+      </div>
 
-        <div>
-          <button
-            onClick={() => saveExcel()}
-            className="bg-green-700 hover:bg-green-500 text-white py-2 px-4 rounded"
-          >
-            导出全部数据
-          </button>
-        </div>
-        <div>
-          <button
-            onClick={() => resetDB()}
-            className="bg-red-500 hover:bg-red-800 text-white py-2 px-4 rounded"
-          >
-            <p>初始化数据库</p>
-          </button>
-        </div>
+      <div>
+        <button
+          onClick={() => saveExcel()}
+          className="bg-green-700 hover:bg-green-500 text-white py-2 px-4 rounded"
+        >
+          导出全部数据
+        </button>
+      </div>
+      <div>
+        <button
+          onClick={() => resetDB()}
+          className="bg-red-500 hover:bg-red-800 text-white py-2 px-4 rounded"
+        >
+          <p>初始化数据库</p>
+        </button>
       </div>
     </div>
   );

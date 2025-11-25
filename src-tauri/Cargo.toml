@@ -1,6 +1,6 @@
 [package]
 name = "iris-logger"
-version = "0.1.2"
+version = "0.1.3"
 description = "记录一些什么"
 authors = ["arco@aoi.sh"]
 license = "MIT"

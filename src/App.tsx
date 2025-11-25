@@ -120,14 +120,13 @@ function App() {
   const debouncedSubmit = useDebouncedCallback(submitInfo, 1000);
 
   return (
-    <div>
-      <div className="absolute top-0 w-full text-2xl text-center pt-16 bg-blue-400">
-        <div className="grid grid-cols-3 gap-4">
-          <div className="place-content-center text-left">
+    <div id="main-div" className="w-full min-w-sm max-w-screen-sm">
+      <div id="head-div" className="absolute top-0 w-full pt-16 bg-cyan-500">
+        <div className="grid grid-cols-2 gap-4 justify-between items-center">
+          <div className="text-left indent-24">
             <Weather hasLocationPermission={hasLocationPermission} />
           </div>
-          <div></div>
-          <div>
+          <div className="text-center">
             {isViewer
               ? (
                 <Link to="/viewer">
@@ -146,22 +145,22 @@ function App() {
           </div>
         </div>
       </div>
-      <Switch>
-        <Route path="/viewer">
-          <Suspense
-            fallback={
-              <div className="absolute top-28 w-full min-w-sm max-w-screen-sm text-2xl text-center p-6 pt-12">
-                页面加载中...
-              </div>
-            }
-          >
-            <Viewer db={db} store={store} />
-          </Suspense>
-        </Route>
-        <Route>
-          <div className="absolute top-28 w-full min-w-sm max-w-screen-sm text-2xl text-center p-6">
-            <div className="grid grid-cols-3 gap-4">
-              <div className="col-span-3">
+      <div id="main-content" className="absolute top-28 w-full">
+        <Switch>
+          <Route path="/viewer">
+            <Suspense
+              fallback={
+                <div className="w-full grid justify-center items-center text-3xl text-center p-6">
+                  页面加载中...
+                </div>
+              }
+            >
+              <Viewer db={db} store={store} />
+            </Suspense>
+          </Route>
+          <Route>
+            <div className="w-full grid grid-cols-3 gap-4 justify-center items-center">
+              <div className="w-full col-span-3">
                 <div
                   onBlurCapture={handleBlurCapture}
                   className="w-full h-60 p-2"
@@ -176,7 +175,7 @@ function App() {
                     className="w-full h-full resize-none border border-gray-400"
                   />
                 </div>
-                <div>
+                <div className="text-center">
                   <button
                     onClick={() => debouncedSubmit()}
                     className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 h-24 w-48 rounded"
@@ -186,9 +185,9 @@ function App() {
                 </div>
               </div>
             </div>
-          </div>
-        </Route>
-      </Switch>
+          </Route>
+        </Switch>
+      </div>
     </div>
   );
 }
