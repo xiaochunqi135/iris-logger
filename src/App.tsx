@@ -79,7 +79,7 @@ function App() {
         [login_time, login_time_str, infoText],
       );
     } catch (e) {
-      await message("数据库写入错误", {
+      await message("数据库写入错误。", {
         title: "警告",
         kind: "error",
       });
@@ -111,13 +111,13 @@ function App() {
     await updateStore("txt", "");
     setTextInfo("");
 
-    await message("记录已提交", {
+    await message("记录已提交。", {
       title: "提示",
       kind: "info",
     });
   }, [textInfo, insertData, updateStore]);
 
-  const debouncedSubmit = useDebouncedCallback(submitInfo, 2000);
+  const debouncedSubmit = useDebouncedCallback(submitInfo, 1000);
 
   return (
     <div>

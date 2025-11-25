@@ -27,7 +27,7 @@ function Viewer({ db, store }: { db: Database | null; store: Store | null }) {
 
         setLogins(result);
       } catch (e) {
-        await message("数据库查询失败", {
+        await message("数据库查询失败。", {
           title: "警告",
           kind: "error",
         });
@@ -52,7 +52,7 @@ function Viewer({ db, store }: { db: Database | null; store: Store | null }) {
         "DROP TABLE IF EXISTS logins; DROP TABLE IF EXISTS _sqlx_migrations;",
       );
     } catch (e) {
-      await message("数据库删除失败", {
+      await message("数据库删除失败。", {
         title: "警告",
         kind: "error",
       });
@@ -60,14 +60,14 @@ function Viewer({ db, store }: { db: Database | null; store: Store | null }) {
     try {
       await store.clear();
     } catch (e) {
-      await message("缓存清空失败", {
+      await message("缓存清空失败。", {
         title: "警告",
         kind: "error",
       });
     }
 
     await message(
-      "【重置成功】请立即完全退出APP，再打开使用。不重启使用会出错。",
+      "【重置成功】请立即完全退出APP再打开，不重启继续使用会出错。",
       {
         title: "注意",
         kind: "warning",
@@ -76,7 +76,7 @@ function Viewer({ db, store }: { db: Database | null; store: Store | null }) {
   }, [db, store]);
 
   const saveExcel = useCallback(async () => {
-    await message("请选择表格存在哪，并且给表格取名，例如“abc.xlsx”。", {
+    await message("请选择储存位置，并且给表格取名，例如“abc.xlsx”。", {
       title: "注意",
       kind: "info",
     });
@@ -100,9 +100,15 @@ function Viewer({ db, store }: { db: Database | null; store: Store | null }) {
         const currentPlatform = platform();
         switch (currentPlatform) {
           case "android":
-            const afile = await open(documentDir);
+            const afile = await open(documentDir, {
+              write: true,
+            });
             await afile.write(excel_raw);
             await afile.close();
+            await message("文件写入成功，请检查你选择的位置和文件名。", {
+              title: "提示",
+              kind: "info",
+            });
             break;
           case "windows":
             const file = await open(documentDir, {
@@ -114,7 +120,7 @@ function Viewer({ db, store }: { db: Database | null; store: Store | null }) {
             await file.close();
             break;
           default:
-            await message("未知平台不支持文件写入", {
+            await message("未知平台不支持文件写入。", {
               title: "警告",
               kind: "error",
             });
@@ -122,7 +128,7 @@ function Viewer({ db, store }: { db: Database | null; store: Store | null }) {
         }
       }
     } catch (e) {
-      await message("文件写入失败", {
+      await message("文件写入失败。", {
         title: "警告",
         kind: "error",
       });
