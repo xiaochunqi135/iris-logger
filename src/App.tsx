@@ -123,7 +123,7 @@ function App() {
     <div id="main-div" className="w-full min-w-sm max-w-screen-sm">
       <div id="head-div" className="absolute top-0 w-full pt-16 bg-cyan-500">
         <div className="grid grid-cols-2 gap-4 justify-between items-center">
-          <div className="text-left indent-20 text-2xl">
+          <div className="text-left indent-12 text-xl">
             <Weather hasLocationPermission={hasLocationPermission} />
           </div>
           <div className="text-center">
@@ -145,7 +145,7 @@ function App() {
           </div>
         </div>
       </div>
-      <div id="main-content" className="absolute top-28 w-full">
+      <div id="main-content" className="absolute top-32 w-full">
         <Switch>
           <Route path="/viewer">
             <Suspense
@@ -160,10 +160,10 @@ function App() {
           </Route>
           <Route>
             <div className="w-full grid grid-cols-3 gap-4 justify-center items-center">
-              <div className="w-full col-span-3 text-3xl">
+              <div className="w-full col-span-3 text-xl">
                 <div
                   onBlurCapture={handleBlurCapture}
-                  className="w-full h-60 p-2"
+                  className="w-full h-60 p-6"
                 >
                   <textarea
                     id="info"
@@ -175,7 +175,7 @@ function App() {
                     className="w-full h-full resize-none border border-gray-400"
                   />
                 </div>
-                <div className="text-center">
+                <div className="text-center text-2xl">
                   <button
                     onClick={() => debouncedSubmit()}
                     className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 h-24 w-48 rounded"
