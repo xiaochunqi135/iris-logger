@@ -123,7 +123,7 @@ function App() {
     <div id="main-div" className="w-full min-w-sm max-w-screen-sm">
       <div id="head-div" className="absolute top-0 w-full pt-16 bg-cyan-500">
         <div className="grid grid-cols-2 gap-4 justify-between items-center">
-          <div className="text-left indent-24">
+          <div className="text-left indent-20 text-2xl">
             <Weather hasLocationPermission={hasLocationPermission} />
           </div>
           <div className="text-center">
@@ -160,7 +160,7 @@ function App() {
           </Route>
           <Route>
             <div className="w-full grid grid-cols-3 gap-4 justify-center items-center">
-              <div className="w-full col-span-3">
+              <div className="w-full col-span-3 text-3xl">
                 <div
                   onBlurCapture={handleBlurCapture}
                   className="w-full h-60 p-2"

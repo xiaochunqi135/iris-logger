@@ -5,6 +5,7 @@ import type Database from "@tauri-apps/plugin-sql";
 import { exportSheet, ExportTypes } from "@jsr/psych__sheet";
 import { open } from "@tauri-apps/plugin-fs";
 import { platform } from "@tauri-apps/plugin-os";
+import { invoke } from "@tauri-apps/api/core";
 
 type Logins = {
   login_id: number;
@@ -73,6 +74,7 @@ function Viewer({ db, store }: { db: Database | null; store: Store | null }) {
         kind: "warning",
       },
     );
+    await invoke("terminate_app");
   }, [db, store]);
 
   const saveExcel = useCallback(async () => {

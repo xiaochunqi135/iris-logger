@@ -12,6 +12,8 @@
 - ~~数据库id自增~~
 - ~~前端添加防抖~~
 - ~~前端分割代码~~
+- ~~字体大小~~
+- ~~reset后退出调用apphandle~~
 
 ### GPS
 
@@ -46,3 +48,9 @@ the jks's password check dotenv
 ### sqlite db
 
 位置在`/home/arco/.config/com.arco.iris-logger/data.db`
+
+### build
+
+```bash
+cargo tauri android build --target armv7
+```

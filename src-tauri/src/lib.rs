@@ -147,6 +147,12 @@ async fn update_weather(app: AppHandle, gps_location: &str) -> Result<Weather, (
     })
 }
 
+#[tauri::command(rename_all = "snake_case")]
+fn terminate_app(app: AppHandle) -> Result<(), ()> {
+    app.exit(0);
+    Ok(())
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let migrations = vec![ Migration {
@@ -180,7 +186,7 @@ pub fn run() {
 
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![update_weather])
+        .invoke_handler(tauri::generate_handler![update_weather, terminate_app])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
