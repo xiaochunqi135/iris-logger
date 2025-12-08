@@ -1,6 +1,6 @@
 [package]
 name = "iris-logger"
-version = "0.1.5"
+version = "0.1.6"
 description = "记录一些什么"
 authors = ["arco@aoi.sh"]
 license = "MIT"
@@ -28,7 +28,7 @@ tauri-plugin-http = "2"
 tauri-plugin-dialog = "2"
 tauri-plugin-store = "2"
 tauri-plugin-fs = "2"
-tauri-plugin-geolocation = { path = "/home/arco/Downloads/plugins-workspace/plugins/geolocation" }
+tauri-plugin-geolocation = { git = "https://github.com/xiaochunqi135/plugins-workspace" }
 tauri-plugin-os = "2"
 
 [profile.dev]
